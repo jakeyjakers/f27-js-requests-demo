@@ -1,3 +1,6 @@
+
+
+
 console.log('connected')
 
 const getAllBtn = document.querySelector('#all')
@@ -12,7 +15,7 @@ const newAgeInput = document.querySelector('#age')
 const newLikesText = document.querySelector('textarea')
 const charContainer = document.querySelector('section')
 
-// const baseURL = 
+ const baseURL = `http://localhost:4000`
 
 function createCharacterCard(char) {
   let charCard = document.createElement('div')
@@ -31,3 +34,34 @@ function createCharacterCard(char) {
 function clearCharacters() {
   charContainer.innerHTML = ``
 }
+
+function getAllChars(){
+  clearCharacters()
+
+axios.get(`${baseURL}/characters`)
+.then((response) => {
+  let data = response.data
+  for(let i = 0; i < data.length; i++){
+    createCharacterCard(data[i])
+  }
+})
+.catch()
+
+}
+
+function getOnechar(event){
+  clearCharacters()
+
+  axios.get(`${baseURL}/character/${event.target.id}`)
+  .then((response)=>{
+    let {data }= response
+    createCharacterCard(response.data)
+  })
+  .catch
+}
+
+for (let i = 0; i < charBtns.length; i++){
+  charBtns[i].addEventListener('click', getOnechar)
+}
+
+getAllBtn.addEventListener('click', getAllChars)
