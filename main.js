@@ -1,6 +1,7 @@
 
 
 
+
 console.log('connected')
 
 const getAllBtn = document.querySelector('#all')
@@ -45,7 +46,9 @@ axios.get(`${baseURL}/characters`)
     createCharacterCard(data[i])
   }
 })
-.catch()
+.catch((err) =>{
+  console.log(err)
+})
 
 }
 
@@ -57,7 +60,36 @@ function getOnechar(event){
     let {data }= response
     createCharacterCard(response.data)
   })
-  .catch
+  .catch((err) =>{
+    console.log(err)
+  })
+}
+
+function createNewChar(event){
+  event.preventDefault()
+
+  clearCharacters()
+
+  let newLikes = newLikesText.value.split(',')
+
+  let body = {
+    firstName: newFirstInput.value,
+    lastName: newLastInput.value,
+    gender: newGenderDropDown.value,
+    age: newAgeInput.value,
+    likes: newLikes,
+  }
+
+  axios.post(`${baseURL}/character`, body)
+  .then((response) =>{
+    let {data} = response
+    for(let i = 0; i < data.length; i++){
+      createCharacterCard(data[i])
+    }
+  })
+  .catch((err) =>{
+    console.log(err)
+  })
 }
 
 for (let i = 0; i < charBtns.length; i++){
@@ -65,3 +97,4 @@ for (let i = 0; i < charBtns.length; i++){
 }
 
 getAllBtn.addEventListener('click', getAllChars)
+createForm.addEventListener('submit', createNewChar)
